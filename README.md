@@ -1,4 +1,4 @@
-# 🤖 Sistema de Control para Robot ESP32-CAM
+#  Sistema de Control para Robot ESP32-CAM
 
 Sistema completo de control remoto para robot basado en ESP32-CAM con streaming de video en tiempo real y control de motores DC.
 
@@ -8,7 +8,7 @@ Sistema completo de control remoto para robot basado en ESP32-CAM con streaming 
 > - **ESP32 Core**: Usa versiones **2.0.11 a 2.0.14** (estables). Evita 3.x.
 > - **Programación sin FTDI**: Si tienes Arduino Uno, NO necesitas comprar programador. Ver [guía](PROGRAMAR_CON_ARDUINO_UNO.md).
 
-## 📋 Tabla de Contenidos
+##  Tabla de Contenidos
 
 - [Características](#características)
 - [Requisitos de Hardware](#requisitos-de-hardware)
@@ -21,7 +21,7 @@ Sistema completo de control remoto para robot basado en ESP32-CAM con streaming 
 
 ---
 
-## ✨ Características
+##  Características
 
 - ✅ **Streaming de video MJPEG** en tiempo real desde la ESP32-CAM
 - ✅ **Control bidireccional** de 2 motores DC mediante driver L298N
@@ -33,7 +33,7 @@ Sistema completo de control remoto para robot basado en ESP32-CAM con streaming 
 
 ---
 
-## 🔧 Requisitos de Hardware
+##  Requisitos de Hardware
 
 ### Componentes Necesarios
 
@@ -57,7 +57,7 @@ Sistema completo de control remoto para robot basado en ESP32-CAM con streaming 
 
 ---
 
-## 🔌 Diagrama de Conexiones
+##  Diagrama de Conexiones
 
 ### Conexiones ESP32-CAM ↔ L298N
 
@@ -138,7 +138,7 @@ IMPORTANTE: Sistema de doble alimentación
 
 ---
 
-## 💾 Instalación del Software
+##  Instalación del Software
 
 ### Paso 1: Instalar Arduino IDE
 
@@ -188,7 +188,7 @@ IMPORTANTE: Sistema de doble alimentación
 7. Esperar a que termine la instalación (puede tardar varios minutos)
 8. **Reiniciar Arduino IDE** para que los cambios tengan efecto
 
-### Paso 4: ⚙️ Configuración OBLIGATORIA de la Placa
+### Paso 4:  Configuración OBLIGATORIA de la Placa
 
 Esta configuración es **crítica** para que el código compile y funcione correctamente.
 
@@ -292,7 +292,7 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 
 ---
 
-## 🚀 Cómo Usar
+##  Cómo Usar
 
 ### Acceder a la Interfaz Web
 
@@ -317,8 +317,8 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 
 ### Controles del LED
 
-- **🔆 Encender LED**: Activa el flash de la cámara
-- **⚫ Apagar LED**: Desactiva el flash
+- ** Encender LED**: Activa el flash de la cámara
+- ** Apagar LED**: Desactiva el flash
 
 ### Funcionamiento
 
@@ -333,7 +333,7 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 
 ---
 
-## 🔧 Solución de Problemas
+##  Solución de Problemas
 
 ### Problema: No se puede cargar el código
 
@@ -609,7 +609,7 @@ void handleRoot() {
 
 ---
 
-## 📱 Crear Acceso Directo en Móvil
+##  Crear Acceso Directo en Móvil
 
 ### Android
 
@@ -627,7 +627,7 @@ void handleRoot() {
 
 ---
 
-## 📊 Especificaciones del Sistema
+##  Especificaciones del Sistema
 
 | Característica | Valor |
 |----------------|-------|
@@ -640,7 +640,7 @@ void handleRoot() {
 
 ---
 
-## 🎓 Conceptos Técnicos
+##  Conceptos Técnicos
 
 ### ¿Cómo funciona el streaming MJPEG?
 
@@ -682,7 +682,7 @@ HTTP Headers → JPEG1 → Boundary → JPEG2 → Boundary → ...
 
 ---
 
-## 🛡️ Advertencias de Seguridad
+##  Advertencias de Seguridad
 
 ⚠️ **IMPORTANTE - LEER ANTES DE USAR**
 
@@ -696,7 +696,7 @@ HTTP Headers → JPEG1 → Boundary → JPEG2 → Boundary → ...
 
 ---
 
-## 📞 Soporte y Recursos
+##  Soporte y Recursos
 
 ### Recursos Adicionales
 
@@ -735,7 +735,7 @@ Este proyecto incluye múltiples guías y recursos:
 
 ---
 
-## �📝 Licencia
+## � Licencia
 
 Este proyecto es de código abierto y puede ser utilizado libremente para proyectos educativos y personales.
 
@@ -759,8 +759,6 @@ Antes de considerar el proyecto completado, verifica:
 - [ ] Todas las conexiones están aisladas y seguras
 
 ---
-
-**🎉 ¡Felicidades! Tu robot ESP32-CAM está listo para usar.**
 
 Si tienes algún problema, revisa la sección de [Solución de Problemas](#solución-de-problemas) o consulta las comunidades mencionadas.
 
