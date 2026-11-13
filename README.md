@@ -252,10 +252,12 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 ### Paso 6: Cargar el Código
 
 1. Abrir el archivo `ESP32_CAM_Robot_Control.ino`
-2. **MODIFICAR las credenciales WiFi**:
+2. **Configurar la red WiFi propia del robot (opcional)**:
+   El ESP32-CAM crea su propia red al arrancar; no necesita conectarse a un router.
+   Si quieres cambiar el nombre o la contraseña, edita estos valores:
    ```cpp
-   const char* ssid = "TU_RED_WIFI";      // Tu SSID
-   const char* password = "TU_PASSWORD";   // Tu contraseña
+   const char* ssid = "Robot-ESP32-CAM"; // Nombre de la red
+   const char* password = "robot-1234";  // Mínimo 8 caracteres
    ```
 3. **Verificar el código**: Clic en ✓ (Verificar)
    - Debe compilar sin errores
@@ -275,18 +277,15 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
    =================================
    ESP32-CAM Robot Control System
    =================================
-   LED inicializado
+   Red WiFi del robot: Robot-ESP32-CAM
+   Dirección IP: 192.168.4.1
    Motores inicializados correctamente
    PSRAM detectado - Configuración alta calidad
-   Cámara inicializada correctamente
-   Conectando a WiFi.....
-   WiFi conectado exitosamente
-   Dirección IP: 192.168.1.100
-   Señal WiFi: -45 dBm
+   LED inicializado
    Servidor HTTP iniciado en puerto 80
    =================================
    Sistema listo!
-   Accede desde tu navegador: http://192.168.1.100
+   Accede desde tu navegador: http://192.168.4.1
    =================================
    ```
 
@@ -296,10 +295,11 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 
 ### Acceder a la Interfaz Web
 
-1. **Conectar tu PC/móvil a la misma red WiFi**
+1. **Conectar tu PC/móvil a la red `Robot-ESP32-CAM`** creada por el ESP32-CAM.
+   - Contraseña predeterminada: `robot-1234`
+   - Esta red es independiente de tu router y no proporciona acceso a internet.
 2. **Abrir un navegador** (Chrome, Firefox, Safari, etc.)
-3. **Escribir la IP** mostrada en el Monitor Serie
-   - Ejemplo: `http://192.168.1.100`
+3. Ir a `http://192.168.4.1` (también se muestra en el Monitor Serie).
 4. **La página se cargará** mostrando:
    - Video en vivo de la cámara
    - Controles de movimiento
@@ -399,16 +399,16 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 3. ✅ **Consumo de cámara** - La cámara consume mucho, verificar alimentación
 4. ✅ Conectar capacitor 100-470µF entre 5V y GND (cerca de la ESP32-CAM)
 
-### Problema: No se conecta a WiFi
+### Problema: No aparece la red WiFi del robot o no puedo conectarme
 
-**Síntomas**: "Conectando a WiFi" indefinidamente
+**Síntomas**: No aparece `Robot-ESP32-CAM` en la lista de redes o falla la conexión.
 
 **Soluciones**:
-1. ✅ Verificar SSID y password en el código (case-sensitive)
-2. ✅ Verificar que el router esté en **2.4GHz** (ESP32 no soporta 5GHz)
-3. ✅ Acercar la ESP32-CAM al router
-4. ✅ Verificar que el WiFi no tenga filtrado MAC activo
-5. ✅ Probar con un hotspot del móvil para descartar problemas de router
+1. ✅ Verificar que la ESP32-CAM esté alimentada correctamente y haya terminado de arrancar.
+2. ✅ Buscar el nombre configurado en `ssid` (distingue mayúsculas y minúsculas).
+3. ✅ Usar la contraseña configurada en `password` (mínimo 8 caracteres).
+4. ✅ Acercar el dispositivo a la ESP32-CAM; el alcance depende del entorno y la antena.
+5. ✅ Reiniciar la ESP32-CAM si la red no aparece.
 
 ### Problema: Cámara no inicializa
 
@@ -497,10 +497,10 @@ Ver guía detallada: [PROGRAMAR_CON_ARDUINO_UNO.md](PROGRAMAR_CON_ARDUINO_UNO.md
 **Síntomas**: Video se congela, comandos tardan en responder
 
 **Soluciones**:
-1. ✅ Acercar dispositivo de control al router
+1. ✅ Acercar el dispositivo de control a la ESP32-CAM
 2. ✅ Reducir calidad/resolución de video
 3. ✅ No usar múltiples dispositivos simultáneos para ver el stream
-4. ✅ Verificar intensidad de señal WiFi (debe ser >-70 dBm)
+4. ✅ Verificar que la señal de la red `Robot-ESP32-CAM` sea estable
 5. ✅ Reducir frame rate (aumentar delay en función handleStream):
    ```cpp
    delay(50);  // Cambiar de 10 a 50 ms
@@ -577,18 +577,20 @@ void handleSpeed() {
 server.on("/speed", handleSpeed);
 ```
 
-### IP Estática (recomendado para producción)
+### Cambiar la IP del punto de acceso (opcional)
+
+Por defecto, la red creada por el ESP32-CAM usa `192.168.4.1`. Para asignarle otra IP,
+configúrala antes de llamar a `WiFi.softAP()` en `setup()`:
 
 ```cpp
-// Reemplazar WiFi.begin() con:
-IPAddress local_IP(192, 168, 1, 100);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress local_IP(192, 168, 4, 1);
+IPAddress gateway(192, 168, 4, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-if (!WiFi.config(local_IP, gateway, subnet)) {
-  Serial.println("Error configurando IP estática");
+if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
+  Serial.println("Error configurando la IP del punto de acceso");
 }
-WiFi.begin(ssid, password);
+WiFi.softAP(ssid, password);
 ```
 
 ### Agregar Autenticación Básica
@@ -634,7 +636,7 @@ void handleRoot() {
 | **Resolución video** | 640x480 (VGA) |
 | **Frame rate** | ~15-25 FPS (depende de WiFi) |
 | **Latencia control** | 50-150ms |
-| **Alcance WiFi** | 10-30m (depende del router) |
+| **Alcance WiFi** | 10-30m aproximadamente (depende del entorno y la antena) |
 | **Consumo ESP32-CAM** | ~300mA (streaming activo) |
 | **Consumo motores** | Depende de motores (típico 200-500mA cada uno) |
 
@@ -691,7 +693,7 @@ HTTP Headers → JPEG1 → Boundary → JPEG2 → Boundary → ...
 3. **Corriente**: Verificar que tu fuente soporte la carga total
 4. **Cortocircuito**: Evitar cables sueltos que puedan tocarse
 5. **Calor**: El L298N puede calentarse - ventilación adecuada
-6. **WiFi abierto**: El sistema NO tiene seguridad - no exponer a internet
+6. **WiFi del robot**: La red del punto de acceso usa contraseña; cámbiala si es necesario y comparte el acceso solo con usuarios de confianza. La red no tiene acceso a internet.
 7. **Control**: Mantener línea de vista - el robot puede moverse de forma impredecible
 
 ---
@@ -746,7 +748,8 @@ Este proyecto es de código abierto y puede ser utilizado libremente para proyec
 Antes de considerar el proyecto completado, verifica:
 
 - [ ] Código cargado exitosamente en ESP32-CAM
-- [ ] ESP32-CAM se conecta a WiFi y muestra IP
+- [ ] ESP32-CAM crea la red `Robot-ESP32-CAM` y muestra su IP
+- [ ] PC/móvil conectado a esa red abre `http://192.168.4.1`
 - [ ] Página web se carga correctamente en el navegador
 - [ ] Video streaming funciona sin cortes
 - [ ] Botón "Adelante" mueve el robot hacia adelante
