@@ -27,8 +27,8 @@
 // ===========================================
 // CONFIGURACIÓN DE RED
 // ===========================================
-const char* ssid = "xxxx";           // Cambia por tu red WiFi 
-const char* password = "xxxx";    // Cambia por tu contraseña
+const char* ssid = "Robot-ESP32-CAM"; // Nombre de la red creada por el ESP32
+const char* password = "robot-1234";  // Contraseña de la red (mínimo 8 caracteres)
 
 // ===========================================
 // CONFIGURACIÓN DE PINES - MOTORES L298N
@@ -718,6 +718,19 @@ void setup() {
   Serial.println("=================================");
   Serial.println("ESP32-CAM Robot Control System");
   Serial.println("=================================");
+
+  // Crear una red WiFi propia para controlar el robot
+  WiFi.mode(WIFI_AP);
+  if (!WiFi.softAP(ssid, password)) {
+    Serial.println("ERROR: No se pudo iniciar la red WiFi del robot");
+    Serial.println("Reiniciando en 3 segundos...");
+    delay(3000);
+    ESP.restart();
+  }
+  Serial.print("Red WiFi del robot: ");
+  Serial.println(ssid);
+  Serial.print("Dirección IP: ");
+  Serial.println(WiFi.softAPIP());
   
   // Inicializar motores
   setupMotors();
@@ -732,33 +745,6 @@ void setup() {
   
   // Inicializar LED (después de cámara para evitar conflicto en GPIO 4)
   setupLED();
-  
-  // Conectar a WiFi
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  
-  Serial.print("Conectando a WiFi");
-  int attempts = 0;
-  while (WiFi.status() != WL_CONNECTED && attempts < 30) {
-    delay(500);
-    Serial.print(".");
-    attempts++;
-  }
-  Serial.println();
-  
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("ERROR: No se pudo conectar a WiFi");
-    Serial.println("Reiniciando en 3 segundos...");
-    delay(3000);
-    ESP.restart();
-  }
-  
-  Serial.println("WiFi conectado exitosamente");
-  Serial.print("Dirección IP: ");
-  Serial.println(WiFi.localIP());
-  Serial.print("Señal WiFi: ");
-  Serial.print(WiFi.RSSI());
-  Serial.println(" dBm");
   
   // Configurar rutas del servidor
   server.on("/", handleRoot);
@@ -778,7 +764,7 @@ void setup() {
   Serial.println("=================================");
   Serial.println("Sistema listo!");
   Serial.print("Accede desde tu navegador: http://");
-  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.softAPIP());
   Serial.println("=================================");
 }
 
